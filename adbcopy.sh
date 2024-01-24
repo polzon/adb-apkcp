@@ -14,15 +14,18 @@ google_services=( \
 # Pulls the package's apk from the device to the local folder
 pull_apk() {
     for i in $@; do
-        apk_paths=$(adb shell pm path "$i" | cut -f 2 -d ":")
-        packages=$(echo "$apk_paths" | grep -Po '(?<=split_).+?(?=\.apk)|base')
+        paths=$(adb shell pm path "$i" | cut -f 2 -d ":")
+        packages=$(echo "$paths" | grep -Po '(?<=split_).+?(?=\.apk)|base')
+        count=0
         for j in $packages; do
-            if [[ $j != "base" ]]; then
-                j="$j.apk"
+            #echo ${packages[$count]}
+            packages[$count]=$(if [[ "$j" != "base" ]]; then
+                echo "$j.apk"
             else
-                j="$i.apk"
-            fi
-            echo $j
+                echo "$i.apk"
+            fi)
+            echo ${packages[$count]}
+            ((++count))
         done
         #adb pull "$j" "$apk"
     done
