@@ -20,14 +20,17 @@ pull_apk() {
         for j in $packages; do
             #echo ${packages[$count]}
             packages[$count]=$(if [[ "$j" != "base" ]]; then
-                echo "$j.apk"
-            else
-                echo "$i.apk"
+                    echo "$j.apk"
+                else
+                    echo "$i.apk"
             fi)
             echo ${packages[$count]}
             ((++count))
         done
-        #adb pull "$j" "$apk"
+        # im tired, will fix tomorrow probably
+        for ((j=0; j <= ${#paths}; j++)); do
+            adb pull ${paths[$j]} ${packages[$j]}
+        done
     done
 }
 
