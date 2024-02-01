@@ -6,8 +6,8 @@ IFS=$'\n\t'
 
 # All packages relating to google services
 google_services=( \
-    com.google.android.gsf \
-    com.google.android.gms \
+    #com.google.android.gsf \
+    #com.google.android.gms \
     com.android.vending \
 )
 
@@ -24,13 +24,19 @@ pull_apk() {
                 else
                     echo "$i.apk"
             fi)
-            echo ${packages[$count]}
+            #echo ${paths[$count]}, ${packages[$count]}
+            #adb pull ${paths[$count]} ${packages[$count]}
             ((++count))
         done
-        # im tired, will fix tomorrow probably
-        for ((j=0; j <= ${#paths}; j++)); do
-            adb pull ${paths[$j]} ${packages[$j]}
+        for j in $paths; do
+            adb pull $j
         done
+        # im tired, will fix tomorrow probably
+        #for ((j=0; j <= ${#paths}; j++)); do
+        #echo $j, ${#paths}
+        #echo ${paths[$j]}, ${packages[$j]}
+        #adb pull ${paths[$j]} ${packages[$j]}
+        #done
     done
 }
 

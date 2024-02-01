@@ -3,8 +3,6 @@
 ``` bash
 # Find all installed packages:
 adb shell cmd package list packages
-
-# Find user installed packages:
 adb shell cmd package list packages -3 | cut -f 2 -d ":"
 
 # Find list of users on device:
