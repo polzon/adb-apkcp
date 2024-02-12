@@ -10,6 +10,7 @@ google_services=( \
     com.google.android.gms \
     com.android.vending
 )
+user='12'
 
 # Pulls the package's apk from the device to the local folder
 pull_apk() {
@@ -20,10 +21,20 @@ pull_apk() {
     paths=$(adb shell pm path "$1" | cut -f 2 -d ":")
     packages=$(echo "$paths" | grep -Po '(?<=split_).+?(?=\.apk)|base')
     
-    for i in $paths; do
-        adb pull $i
-    done
+    # Pull apks from devices
+    for i in $paths; do adb pull $i; done
+    
+    # Install packages
+    echo "Installing $1"
+    adb install-multiple --user $user *.apk
+    echo "Installed $1"
+    
+    # Cleanup
+    rm *.apk
     cd ..
+    rmdir $1
+    
+    return
 }
 
 # Install defined packages
