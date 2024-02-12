@@ -6,38 +6,27 @@ IFS=$'\n\t'
 
 # All packages relating to google services
 google_services=( \
-    #com.google.android.gsf \
-    #com.google.android.gms \
-    com.android.vending \
+    com.google.android.gsf \
+    com.google.android.gms \
+    com.android.vending
 )
 
 # Pulls the package's apk from the device to the local folder
 pull_apk() {
-    for i in $@; do
-        paths=$(adb shell pm path "$i" | cut -f 2 -d ":")
-        packages=$(echo "$paths" | grep -Po '(?<=split_).+?(?=\.apk)|base')
-        count=0
-        for j in $packages; do
-            #echo ${packages[$count]}
-            packages[$count]=$(if [[ "$j" != "base" ]]; then
-                    echo "$j.apk"
-                else
-                    echo "$i.apk"
-            fi)
-            #echo ${paths[$count]}, ${packages[$count]}
-            #adb pull ${paths[$count]} ${packages[$count]}
-            ((++count))
-        done
-        for j in $paths; do
-            adb pull $j
-        done
-        # im tired, will fix tomorrow probably
-        #for ((j=0; j <= ${#paths}; j++)); do
-        #echo $j, ${#paths}
-        #echo ${paths[$j]}, ${packages[$j]}
-        #adb pull ${paths[$j]} ${packages[$j]}
-        #done
+    if [[ -z $@ ]]; then return 1; fi
+    if [[ ! -d $1 ]]; then mkdir $1; fi
+    cd $1
+    
+    paths=$(adb shell pm path "$1" | cut -f 2 -d ":")
+    packages=$(echo "$paths" | grep -Po '(?<=split_).+?(?=\.apk)|base')
+    
+    for i in $paths; do
+        adb pull $i
     done
+    cd ..
 }
 
-pull_apk ${google_services[*]}
+# Install defined packages
+for i in ${google_services[@]}; do
+    pull_apk $i
+done
