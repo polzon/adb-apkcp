@@ -10,10 +10,17 @@ google_services=( \
     com.google.android.gms \
     com.android.vending
 )
+other_services=( \
+    com.airwatch.browser \
+    com.airwatch.tunnel \
+    com.microsoft.office.outlook \
+)
+
 user='12'
+installed_packages=$(adb shell pm list packages | cut -f 2 -d ":")
 
 # Pulls the package's apk from the device to the local folder
-pull_apk() {
+copy_apk() {
     if [[ -z $@ ]]; then return 1; fi
     if [[ ! -d $1 ]]; then mkdir $1; fi
     cd $1
@@ -38,6 +45,7 @@ pull_apk() {
 }
 
 # Install defined packages
-for i in ${google_services[@]}; do
-    pull_apk $i
+for i in ${other_services[@]}; do
+    #copy_apk $i
+    copy_apk com.loudtalks
 done

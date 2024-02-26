@@ -44,4 +44,9 @@ adb pull /data/app/~~Rzvr98rw48S8wStPoFOUQA==/com.google.android.gsf-EtoE-ObbZce
 adb shell pm install --user 15 com.google.android.gsf
 ```
 
+```bash
+# Shell access:
+adb shell
+```
+
 * Current task: copy package from user profile and install into work profile user.
